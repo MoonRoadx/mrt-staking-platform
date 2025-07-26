@@ -16,9 +16,7 @@
             height: 8px;
             border-radius: 50%;
             background: #22d3ee;
-        const swapToAmount = document.getElementById('swapToAmount');
-
-        // Fonction de déconnexion
+        }
 
         body {
             font-family: 'Arial', sans-serif;
@@ -699,7 +697,7 @@
             document.getElementById('swapUsdValue').textContent = `≈ ${usdValue}`;
         });
 
-        // Connecter Phantom avec vraies données
+        // Connecter Phantom
         phantomBtn.addEventListener('click', async () => {
             phantomBtn.innerHTML = '<span class="loading"></span> Connexion Phantom...';
             
@@ -709,16 +707,10 @@
                 }
                 
                 const response = await window.solana.connect();
-                const walletAddr = response.publicKey.toString();
-                
-                // Récupérer les vrais balances (simulés réalistement)
-                userBalance = await getMRTBalance(walletAddr);
-                solBalance = await getSOLBalance(walletAddr);
-                
                 walletConnected = true;
                 connectedWallet = 'Phantom';
                 
-                walletAddress.textContent = `${walletAddr.slice(0,4)}${walletAddr.slice(4,8).toUpperCase()}...${walletAddr.slice(-4)} (Phantom)`;
+                walletAddress.textContent = `${response.publicKey.toString().slice(0,8)}...${response.publicKey.toString().slice(-4)} (Phantom)`;
                 walletStatus.classList.remove('wallet-disconnected');
                 phantomBtn.innerHTML = '✅ Phantom Connecté';
                 phantomBtn.disabled = true;
@@ -728,8 +720,7 @@
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
-                
-                showNotification(`Phantom connecté! Balance: ${userBalance.toLocaleString()} MRT`);
+                showNotification('Phantom wallet connecté avec succès!');
             } catch (error) {
                 phantomBtn.innerHTML = '👻 Phantom';
                 showNotification('Erreur connexion Phantom: ' + error.message, true);
@@ -737,7 +728,7 @@
             }
         });
 
-        // Connecter Solflare avec vraies données
+        // Connecter Solflare
         solflareBtn.addEventListener('click', async () => {
             solflareBtn.innerHTML = '<span class="loading"></span> Connexion Solflare...';
             
@@ -747,16 +738,10 @@
                 }
                 
                 await window.solflare.connect();
-                const walletAddr = window.solflare.publicKey.toString();
-                
-                // Récupérer les vrais balances (simulés réalistement)
-                userBalance = await getMRTBalance(walletAddr);
-                solBalance = await getSOLBalance(walletAddr);
-                
                 walletConnected = true;
                 connectedWallet = 'Solflare';
                 
-                walletAddress.textContent = `${walletAddr.slice(0,4)}${walletAddr.slice(4,8).toUpperCase()}...${walletAddr.slice(-4)} (Solflare)`;
+                walletAddress.textContent = `${window.solflare.publicKey.toString().slice(0,8)}...${window.solflare.publicKey.toString().slice(-4)} (Solflare)`;
                 walletStatus.classList.remove('wallet-disconnected');
                 solflareBtn.innerHTML = '✅ Solflare Connecté';
                 solflareBtn.disabled = true;
@@ -766,8 +751,7 @@
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
-                
-                showNotification(`Solflare connecté! Balance: ${userBalance.toLocaleString()} MRT`);
+                showNotification('Solflare wallet connecté avec succès!');
             } catch (error) {
                 solflareBtn.innerHTML = '🔥 Solflare';
                 showNotification('Erreur connexion Solflare: ' + error.message, true);
@@ -775,22 +759,20 @@
             }
         });
 
-        // Connecter Jupiter Wallet avec données simulées
+        // Connecter Jupiter Wallet
         jupiterBtn.addEventListener('click', async () => {
             jupiterBtn.innerHTML = '<span class="loading"></span> Connexion Jupiter...';
             
             try {
-                // Simulation d'une connexion Jupiter avec adresse réaliste
-                const fakeJupiterAddress = 'JUP' + Math.random().toString(36).substring(2, 45).toUpperCase();
-                
-                // Récupérer des balances simulés
-                userBalance = await getMRTBalance(fakeJupiterAddress);
-                solBalance = await getSOLBalance(fakeJupiterAddress);
-                
+                // Jupiter utilise généralement l'API wallet standard ou une interface similaire
+                // Pour la démo, on simule une connexion Jupiter
                 walletConnected = true;
                 connectedWallet = 'Jupiter';
                 
-                walletAddress.textContent = `${fakeJupiterAddress.slice(0,4)}${fakeJupiterAddress.slice(4,8)}...${fakeJupiterAddress.slice(-4)} (Jupiter)`;
+                // Simulation d'une adresse Jupiter
+                const fakeJupiterAddress = 'JUP' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                
+                walletAddress.textContent = `${fakeJupiterAddress}...${fakeJupiterAddress.slice(-4)} (Jupiter)`;
                 walletStatus.classList.remove('wallet-disconnected');
                 jupiterBtn.innerHTML = '✅ Jupiter Connecté';
                 jupiterBtn.disabled = true;
@@ -800,8 +782,7 @@
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
-                
-                showNotification(`Jupiter connecté! Balance: ${userBalance.toLocaleString()} MRT`);
+                showNotification('Jupiter wallet connecté avec succès!');
             } catch (error) {
                 jupiterBtn.innerHTML = '🪐 Jupiter';
                 showNotification('Erreur connexion Jupiter: ' + error.message, true);
