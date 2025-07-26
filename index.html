@@ -427,7 +427,7 @@
                 <button class="wallet-btn" id="jupiterBtn">
                     🪐 Jupiter
                 </button>
-                <button class="disconnect-btn" id="disconnectBtn" style="display: none;">
+                <button class="disconnect-btn" id="disconnectBtn" style="display: none;" onclick="disconnectWallet()">
                     🔌 Déconnecter
                 </button>
             </div>
@@ -770,11 +770,7 @@
             }
         });
 
-        // Bouton déconnexion
-        disconnectBtn.addEventListener('click', () => {
-            console.log('Déconnexion demandée...');
-            disconnectWallet();
-        });
+        // Bouton déconnexion - supprimé d'ici car ajouté dans window.load
 
         // Bouton connecter wallet générique
         connectWalletBtn.addEventListener('click', () => {
@@ -902,6 +898,22 @@
 
         // Initialisation au chargement
         window.addEventListener('load', () => {
+            console.log('🚀 Chargement de l\'application...');
+            
+            // Vérifier que tous les éléments existent
+            console.log('Bouton déconnexion trouvé:', disconnectBtn);
+            
+            // Ajouter l'événement de déconnexion ici pour être sûr
+            if (disconnectBtn) {
+                disconnectBtn.addEventListener('click', function() {
+                    console.log('🔌 Clic déconnexion détecté!');
+                    disconnectWallet();
+                });
+                console.log('✅ Event listener déconnexion ajouté');
+            } else {
+                console.error('❌ Bouton déconnexion non trouvé!');
+            }
+            
             // Vérifier si Phantom est installé
             if (typeof window.solana !== 'undefined' && window.solana.isPhantom) {
                 phantomBtn.innerHTML = '👻 Phantom Détecté';
