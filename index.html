@@ -86,15 +86,18 @@
             background: rgba(239, 68, 68, 0.2);
             border: 2px solid #ef4444;
             color: #ef4444;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.9rem;
+            font-weight: 600;
             margin-top: 10px;
+            transition: all 0.3s ease;
         }
 
         .disconnect-btn:hover {
             background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-1px);
         }
 
         .stats-grid {
@@ -768,7 +771,10 @@
         });
 
         // Bouton déconnexion
-        disconnectBtn.addEventListener('click', disconnectWallet);
+        disconnectBtn.addEventListener('click', () => {
+            console.log('Déconnexion demandée...');
+            disconnectWallet();
+        });
 
         // Bouton connecter wallet générique
         connectWalletBtn.addEventListener('click', () => {
