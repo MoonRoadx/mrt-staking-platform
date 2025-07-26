@@ -57,8 +57,8 @@
         }
 
         .wallet-btn {
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
+            background: rgba(34, 211, 238, 0.2);
+            border: 2px solid #22d3ee;
             padding: 12px 20px;
             border-radius: 12px;
             cursor: pointer;
@@ -67,12 +67,34 @@
             align-items: center;
             gap: 8px;
             font-weight: 600;
-            color: #333;
+            color: #22d3ee;
         }
 
         .wallet-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(34, 211, 238, 0.3);
+            background: rgba(34, 211, 238, 0.3);
+        }
+
+        .wallet-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .disconnect-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+            color: #ef4444;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .disconnect-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
         }
 
         .stats-grid {
@@ -387,25 +409,20 @@
     <div class="container">
         <header>
             <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 15px;">
-                <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #22d3ee 0%, #fbbf24 50%, #0891b2 100%); display: flex; align-items: center; justify-content: center; position: relative; border: 3px solid rgba(34, 211, 238, 0.3);">
-                    <div style="font-size: 24px; font-weight: bold; color: #0f172a;">M</div>
-                    <div style="position: absolute; bottom: -5px; right: -5px; width: 25px; height: 25px; background: linear-gradient(45deg, #22d3ee, #0fb6d6); border-radius: 8px; display: flex; align-items: center; justify-content: center; transform: rotate(-45deg);">
-                        <div style="width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 8px solid #fbbf24; transform: rotate(45deg);"></div>
-                    </div>
-                    <div style="position: absolute; bottom: -8px; right: 2px; font-size: 6px; color: #22d3ee; font-weight: bold; writing-mode: vertical-rl; text-orientation: mixed;">MOONROAD</div>
-                </div>
+                <div style="font-size: 40px;">🚀</div>
                 <h1>MasterStake</h1>
             </div>
             <p class="subtitle">Plateforme de staking premium avec Jupiter DEX intégré</p>
             
             <div class="wallet-selector">
                 <button class="wallet-btn" id="phantomBtn">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDI0QzE4LjYyNzQgMjQgMjQgMTguNjI3NCAyNCAxMlMxOC42Mjc0IDAgMTIgMFMwIDUuMzcyNTggMCAxMlM1LjM3MjU4IDI0IDEyIDI0WiIgZmlsbD0iI0FCOUZGNCIvPgo8cGF0aCBkPSJNMTcuNCA4LjJDMTcuNCA4LjIgMTYuOCA3LjYgMTYuMiA3LjZDMTMuOCA3LjYgMTEuNCA4IDkgOEM2LjYgOCA0LjIgNy42IDEuOCA3LjZDMS4yIDcuNiAwLjYgOC4yIDAuNiA4LjJDMC42IDguMiAwLjYgOS40IDAuNiAxMC44QzAuNiAxMi4yIDAuNiAxMy42IDAuNiAxNUMwLjYgMTYuNCAwLjYgMTcuOCAwLjYgMTguMkMwLjYgMTguMiAxLjIgMTguOCAxLjggMTguOEM0LjIgMTguOCA2LjYgMTguNCA5IDE4LjRDMTEuNCAxOC40IDEzLjggMTguOCAxNi4yIDE4LjhDMTYuOCAxOC44IDE3LjQgMTguMiAxNy40IDE4LjJDMTcuNCAxOC4yIDE3LjQgMTYuOCAxNy40IDE1QzE3LjQgMTMuNiAxNy40IDEyLjIgMTcuNCAxMC44QzE3LjQgOS40IDE3LjQgOC4yIDE3LjQgOC4yWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==" alt="Phantom" width="20" height="20">
-                    Phantom
+                    👻 Phantom
                 </button>
                 <button class="wallet-btn" id="solflareBtn">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDI0QzE4LjYyNzQgMjQgMjQgMTguNjI3NCAyNCAxMlMxOC42Mjc0IDAgMTIgMFMwIDUuMzcyNTggMCAxMlM1LjM3MjU4IDI0IDEyIDI0WiIgZmlsbD0iI0ZGQzk0NyIvPgo8cGF0aCBkPSJNMTggOUgxMEw2IDRIMTRMMTU5WiIgZmlsbD0iYmxhY2siLz4KPHA+KHBhdGggZD0iTTE4IDE1SDEwTDYgMjBIMTRMMTggMTVaIiBmaWxsPSJibGFjayIvPgo8cGF0aCBkPSJNNiAxMkgxOFYxMkg2WiIgZmlsbD0iYmxhY2siLz4KPC9zdmc+Cg==" alt="Solflare" width="20" height="20">
-                    Solflare
+                    🔥 Solflare
+                </button>
+                <button class="disconnect-btn" id="disconnectBtn" style="display: none;">
+                    🔌 Déconnecter
                 </button>
             </div>
 
@@ -597,7 +614,7 @@
         const stakeAmount = document.getElementById('stakeAmount');
         const notification = document.getElementById('notification');
         const swapFromAmount = document.getElementById('swapFromAmount');
-        const swapToAmount = document.getElementById('swapToAmount');
+        const disconnectBtn = document.getElementById('disconnectBtn');
 
         // Mise à jour des statistiques
         function updateStats() {
@@ -671,6 +688,7 @@
                 phantomBtn.innerHTML = '✅ Phantom Connecté';
                 phantomBtn.disabled = true;
                 solflareBtn.style.display = 'none';
+                disconnectBtn.style.display = 'block';
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
@@ -700,6 +718,7 @@
                 solflareBtn.innerHTML = '✅ Solflare Connecté';
                 solflareBtn.disabled = true;
                 phantomBtn.style.display = 'none';
+                disconnectBtn.style.display = 'block';
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
@@ -710,6 +729,9 @@
                 console.error('Erreur Solflare:', error);
             }
         });
+
+        // Bouton déconnexion
+        disconnectBtn.addEventListener('click', disconnectWallet);
 
         // Bouton connecter wallet générique
         connectWalletBtn.addEventListener('click', () => {
@@ -840,7 +862,7 @@
             // Vérifier si Phantom est installé
             if (typeof window.solana !== 'undefined' && window.solana.isPhantom) {
                 phantomBtn.innerHTML = '👻 Phantom Détecté';
-                phantomBtn.style.background = 'rgba(30, 58, 138, 0.2)';
+                phantomBtn.style.background = 'rgba(34, 211, 238, 0.3)';
             } else {
                 phantomBtn.innerHTML = '👻 Installer Phantom';
                 phantomBtn.onclick = () => window.open('https://phantom.app/', '_blank');
@@ -849,7 +871,7 @@
             // Vérifier si Solflare est installé
             if (typeof window.solflare !== 'undefined') {
                 solflareBtn.innerHTML = '🔥 Solflare Détecté';
-                solflareBtn.style.background = 'rgba(251, 191, 36, 0.2)';
+                solflareBtn.style.background = 'rgba(34, 211, 238, 0.3)';
             } else {
                 solflareBtn.innerHTML = '🔥 Installer Solflare';
                 solflareBtn.onclick = () => window.open('https://solflare.com/', '_blank');
