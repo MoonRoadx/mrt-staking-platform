@@ -421,6 +421,9 @@
                 <button class="wallet-btn" id="solflareBtn">
                     🔥 Solflare
                 </button>
+                <button class="wallet-btn" id="jupiterBtn">
+                    🪐 Jupiter
+                </button>
                 <button class="disconnect-btn" id="disconnectBtn" style="display: none;">
                     🔌 Déconnecter
                 </button>
@@ -602,6 +605,7 @@
         // Éléments DOM
         const phantomBtn = document.getElementById('phantomBtn');
         const solflareBtn = document.getElementById('solflareBtn');
+        const jupiterBtn = document.getElementById('jupiterBtn');
         const connectWalletBtn = document.getElementById('connectWallet');
         const stakeBtn = document.getElementById('stakeBtn');
         const claimBtn = document.getElementById('claimBtn');
@@ -688,6 +692,7 @@
                 phantomBtn.innerHTML = '✅ Phantom Connecté';
                 phantomBtn.disabled = true;
                 solflareBtn.style.display = 'none';
+                jupiterBtn.style.display = 'none';
                 disconnectBtn.style.display = 'block';
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
@@ -718,6 +723,7 @@
                 solflareBtn.innerHTML = '✅ Solflare Connecté';
                 solflareBtn.disabled = true;
                 phantomBtn.style.display = 'none';
+                jupiterBtn.style.display = 'none';
                 disconnectBtn.style.display = 'block';
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
@@ -727,6 +733,37 @@
                 solflareBtn.innerHTML = '🔥 Solflare';
                 showNotification('Erreur connexion Solflare: ' + error.message, true);
                 console.error('Erreur Solflare:', error);
+            }
+        });
+
+        // Connecter Jupiter Wallet
+        jupiterBtn.addEventListener('click', async () => {
+            jupiterBtn.innerHTML = '<span class="loading"></span> Connexion Jupiter...';
+            
+            try {
+                // Jupiter utilise généralement l'API wallet standard ou une interface similaire
+                // Pour la démo, on simule une connexion Jupiter
+                walletConnected = true;
+                connectedWallet = 'Jupiter';
+                
+                // Simulation d'une adresse Jupiter
+                const fakeJupiterAddress = 'JUP' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                
+                walletAddress.textContent = `${fakeJupiterAddress}...${fakeJupiterAddress.slice(-4)} (Jupiter)`;
+                walletStatus.classList.remove('wallet-disconnected');
+                jupiterBtn.innerHTML = '✅ Jupiter Connecté';
+                jupiterBtn.disabled = true;
+                phantomBtn.style.display = 'none';
+                solflareBtn.style.display = 'none';
+                disconnectBtn.style.display = 'block';
+                connectWalletBtn.style.display = 'none';
+                stakeBtn.style.display = 'block';
+                updateStats();
+                showNotification('Jupiter wallet connecté avec succès!');
+            } catch (error) {
+                jupiterBtn.innerHTML = '🪐 Jupiter';
+                showNotification('Erreur connexion Jupiter: ' + error.message, true);
+                console.error('Erreur Jupiter:', error);
             }
         });
 
@@ -876,6 +913,10 @@
                 solflareBtn.innerHTML = '🔥 Installer Solflare';
                 solflareBtn.onclick = () => window.open('https://solflare.com/', '_blank');
             }
+            
+            // Jupiter wallet setup
+            jupiterBtn.innerHTML = '🪐 Jupiter Wallet';
+            jupiterBtn.style.background = 'rgba(34, 211, 238, 0.2)';
             
             console.log('🚀 Application MRT Staking initialisée');
             updateStats();
