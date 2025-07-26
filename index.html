@@ -419,7 +419,6 @@
             </div>
         </div>
 
-        <!-- Nouvelles stats MRT basées sur Jupiter -->
         <div class="stats-grid" style="margin-bottom: 20px;">
             <div class="stat-card">
                 <div class="stat-value" style="color: #10b981;">$114k</div>
@@ -443,7 +442,7 @@
             <div class="card">
                 <h2>🚀 Staker vos MRT</h2>
                 
-                <div class="wallet-status" id="walletStatus">
+                <div class="wallet-status wallet-disconnected" id="walletStatus">
                     <strong>Wallet:</strong> <span id="walletAddress">Non connecté</span>
                     <br>
                     <strong>Balance MRT:</strong> <span id="solBalance">0 MRT</span> <span style="color: #10b981; font-size: 0.9rem;">($0.00)</span>
@@ -507,10 +506,11 @@
                     </select>
                 </div>
 
+                <button class="btn" id="connectWallet">Connecter Wallet</button>
                 <button class="btn" id="stakeBtn" style="display: none;">Staker MRT</button>
 
                 <div class="rewards-section">
-                    <div class="rewards-amount" id="pendingRewards">0 MRT</div>
+                    <div class="rewards-amount" id="pendingRewards">125 MRT</div>
                     <div>Récompenses de staking en attente</div>
                     <button class="btn btn-secondary" id="claimBtn" style="margin-top: 15px;">Réclamer Récompenses</button>
                 </div>
@@ -554,21 +554,13 @@
 
     <div class="notification" id="notification"></div>
 
-    <!-- Scripts Web3 et Wallets -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/buffer/6.0.3/buffer.min.js"></script>
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
-    <script src="https://unpkg.com/@solana/spl-token@latest/lib/index.iife.min.js"></script>
-    
-    <!-- Script principal -->
     <script>
-        // Configuration Solana et MRT
-        const SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
+        // Configuration
         const MRT_MINT_ADDRESS = 'BAXJcX7yaNyXWmDycpCF9xPpDx67UWcVhC68rCnYukJd';
         
         // Variables globales
-        let connection;
-        let wallet = null;
         let walletConnected = false;
+        let connectedWallet = null;
         let userBalance = 10000; // MRT
         let solBalance = 5; // SOL pour les frais
         let totalStaked = 7500; // MRT
@@ -577,6 +569,7 @@
         // Éléments DOM
         const phantomBtn = document.getElementById('phantomBtn');
         const solflareBtn = document.getElementById('solflareBtn');
+        const connectWalletBtn = document.getElementById('connectWallet');
         const stakeBtn = document.getElementById('stakeBtn');
         const claimBtn = document.getElementById('claimBtn');
         const undelegateBtn = document.getElementById('undelegateBtn');
@@ -590,28 +583,265 @@
         const swapFromAmount = document.getElementById('swapFromAmount');
         const swapToAmount = document.getElementById('swapToAmount');
 
-        // Initialisation de la connection Solana
-        async function initializeSolana() {
-            try {
-                connection = new solanaWeb3.Connection(SOLANA_RPC, 'confirmed');
-                console.log('✅ Connection Solana initialisée');
-            } catch (error) {
-                console.error('❌ Erreur initialisation Solana:', error);
+        // Mise à jour des statistiques
+        function updateStats() {
+            const mrtPrice = 0.00000538;
+            document.getElementById('totalStaked').textContent = totalStaked.toLocaleString();
+            document.getElementById('totalRewards').textContent = pendingRewards.toLocaleString();
+            document.getElementById('pendingRewards').textContent = pendingRewards.toFixed(0) + ' MRT';
+            document.getElementById('solBalance').textContent = userBalance.toLocaleString() + ' MRT';
+            document.getElementById('solBalanceForFees').textContent = solBalance.toFixed(2) + ' SOL';
+            
+            // Mettre à jour la valeur USD du balance
+            const usdValue = (userBalance * mrtPrice).toFixed(6);
+            const balanceElement = document.getElementById('solBalance');
+            const usdSpan = balanceElement.nextElementSibling;
+            if (usdSpan) {
+                usdSpan.textContent = `(${usdValue})`;
             }
         }
 
-        // Fonction pour connecter Phantom wallet
-        async function connectPhantomWallet() {
+        // Afficher une notification
+        function showNotification(message, isError = false) {
+            notification.textContent = message;
+            notification.className = 'notification show' + (isError ? ' error' : '');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Simuler les taux de swap Jupiter vers MRT
+        swapFromAmount.addEventListener('input', () => {
+            const amount = parseFloat(swapFromAmount.value) || 0;
+            const fromToken = document.getElementById('swapFromToken').value;
+            
+            // Taux basés sur le prix MRT réel: $0.00000538
+            const mrtPriceUSD = 0.00000538;
+            const solPriceUSD = 188.36;
+            const usdcPrice = 1.0;
+            const usdtPrice = 1.0;
+            const rayPriceUSD = 2.5;
+            
+            const rates = {
+                'SOL': solPriceUSD / mrtPriceUSD,      // ~35,007,434 MRT par SOL
+                'USDC': usdcPrice / mrtPriceUSD,       // ~185,873 MRT par USDC
+                'USDT': usdtPrice / mrtPriceUSD,       // ~185,873 MRT par USDT
+                'RAY': rayPriceUSD / mrtPriceUSD        // ~464,684 MRT par RAY
+            };
+            
+            const mrtAmount = amount * (rates[fromToken] || 0);
+            swapToAmount.value = mrtAmount.toFixed(0);
+            
+            // Afficher la valeur USD estimée
+            const usdValue = (mrtAmount * mrtPriceUSD).toFixed(6);
+            document.getElementById('swapUsdValue').textContent = `≈ ${usdValue}`;
+        });
+
+        // Connecter Phantom
+        phantomBtn.addEventListener('click', async () => {
+            phantomBtn.innerHTML = '<span class="loading"></span> Connexion Phantom...';
+            
             try {
                 if (!window.solana || !window.solana.isPhantom) {
-                    throw new Error('Phantom wallet non détecté');
+                    throw new Error('Phantom wallet non installé');
                 }
                 
                 const response = await window.solana.connect();
-                wallet = {
-                    publicKey: response.publicKey.toString(),
-                    provider: window.solana,
-                    type: 'phantom'
-                };
+                walletConnected = true;
+                connectedWallet = 'Phantom';
                 
-                console.log('✅
+                walletAddress.textContent = `${response.publicKey.toString().slice(0,8)}...${response.publicKey.toString().slice(-4)} (Phantom)`;
+                walletStatus.classList.remove('wallet-disconnected');
+                phantomBtn.innerHTML = '✅ Phantom Connecté';
+                phantomBtn.disabled = true;
+                solflareBtn.style.display = 'none';
+                connectWalletBtn.style.display = 'none';
+                stakeBtn.style.display = 'block';
+                updateStats();
+                showNotification('Phantom wallet connecté avec succès!');
+            } catch (error) {
+                phantomBtn.innerHTML = '👻 Phantom';
+                showNotification('Erreur connexion Phantom: ' + error.message, true);
+                console.error('Erreur Phantom:', error);
+            }
+        });
+
+        // Connecter Solflare
+        solflareBtn.addEventListener('click', async () => {
+            solflareBtn.innerHTML = '<span class="loading"></span> Connexion Solflare...';
+            
+            try {
+                if (!window.solflare) {
+                    throw new Error('Solflare wallet non installé');
+                }
+                
+                await window.solflare.connect();
+                walletConnected = true;
+                connectedWallet = 'Solflare';
+                
+                walletAddress.textContent = `${window.solflare.publicKey.toString().slice(0,8)}...${window.solflare.publicKey.toString().slice(-4)} (Solflare)`;
+                walletStatus.classList.remove('wallet-disconnected');
+                solflareBtn.innerHTML = '✅ Solflare Connecté';
+                solflareBtn.disabled = true;
+                phantomBtn.style.display = 'none';
+                connectWalletBtn.style.display = 'none';
+                stakeBtn.style.display = 'block';
+                updateStats();
+                showNotification('Solflare wallet connecté avec succès!');
+            } catch (error) {
+                solflareBtn.innerHTML = '🔥 Solflare';
+                showNotification('Erreur connexion Solflare: ' + error.message, true);
+                console.error('Erreur Solflare:', error);
+            }
+        });
+
+        // Bouton connecter wallet générique
+        connectWalletBtn.addEventListener('click', () => {
+            showNotification('Veuillez cliquer sur Phantom ou Solflare pour vous connecter', true);
+        });
+
+        // Jupiter Swap
+        jupiterSwapBtn.addEventListener('click', () => {
+            const fromAmount = parseFloat(swapFromAmount.value);
+            const toAmount = parseFloat(swapToAmount.value);
+            
+            if (!fromAmount || fromAmount <= 0) {
+                showNotification('Veuillez entrer un montant valide à swapper', true);
+                return;
+            }
+
+            if (!walletConnected) {
+                showNotification('Veuillez connecter votre wallet d\'abord', true);
+                return;
+            }
+
+            jupiterSwapBtn.innerHTML = '<span class="loading"></span> Swap en cours...';
+            
+            setTimeout(() => {
+                userBalance += toAmount;
+                jupiterSwapBtn.innerHTML = 'Swap vers MRT via Jupiter';
+                swapFromAmount.value = '';
+                swapToAmount.value = '';
+                updateStats();
+                showNotification(`Swap réussi! +${toAmount.toFixed(0)} MRT reçus (≈${(toAmount * 0.00000538).toFixed(6)})`);
+            }, 3000);
+        });
+
+        // Staker des MRT
+        stakeBtn.addEventListener('click', () => {
+            const amount = parseFloat(stakeAmount.value);
+            
+            if (!amount || amount <= 0) {
+                showNotification('Veuillez entrer un montant MRT valide', true);
+                return;
+            }
+            
+            if (amount > userBalance) {
+                showNotification('Solde MRT insuffisant', true);
+                return;
+            }
+
+            if (amount < 100) {
+                showNotification('Montant minimum: 100 MRT', true);
+                return;
+            }
+
+            stakeBtn.innerHTML = '<span class="loading"></span> Staking en cours...';
+            
+            setTimeout(() => {
+                userBalance -= amount;
+                totalStaked += amount;
+                
+                // Ajouter une nouvelle position de staking
+                const positionsList = document.getElementById('positionsList');
+                const newPosition = document.createElement('div');
+                newPosition.className = 'position-item';
+                
+                const period = parseInt(document.getElementById('stakePeriod').value);
+                const apyMap = {30: 15, 90: 18, 180: 22, 365: 28};
+                const apy = apyMap[period];
+                const endDate = new Date();
+                endDate.setDate(endDate.getDate() + period);
+                
+                newPosition.innerHTML = `
+                    <div class="position-header">
+                        <div class="position-amount">${amount.toLocaleString()} MRT</div>
+                        <div class="position-apy">${apy}% APY</div>
+                    </div>
+                    <div class="position-details">
+                        <div><strong>Période:</strong> ${period} jours</div>
+                        <div><strong>État:</strong> Actif</div>
+                        <div><strong>Début:</strong> ${new Date().toLocaleDateString('fr-FR')}</div>
+                        <div><strong>Fin:</strong> ${endDate.toLocaleDateString('fr-FR')}</div>
+                    </div>
+                `;
+                
+                positionsList.prepend(newPosition);
+                
+                stakeAmount.value = '';
+                stakeBtn.innerHTML = 'Staker MRT';
+                updateStats();
+                const usdValue = (amount * 0.00000538).toFixed(6);
+                showNotification(`${amount.toLocaleString()} MRT stakés (≈${usdValue})! APY: ${apy}%`);
+            }, 3000);
+        });
+
+        // Réclamer les récompenses
+        claimBtn.addEventListener('click', () => {
+            if (pendingRewards <= 0) {
+                showNotification('Aucune récompense à réclamer', true);
+                return;
+            }
+
+            claimBtn.innerHTML = '<span class="loading"></span> Réclamation...';
+            
+            setTimeout(() => {
+                userBalance += pendingRewards;
+                const usdValue = (pendingRewards * 0.00000538).toFixed(6);
+                pendingRewards = 0;
+                claimBtn.innerHTML = 'Réclamer Récompenses';
+                updateStats();
+                showNotification(`Récompenses réclamées! +${usdValue} en MRT`);
+            }, 2000);
+        });
+
+        // Unstaker
+        undelegateBtn.addEventListener('click', () => {
+            showNotification('Sélectionnez une position pour unstaker. Les tokens seront débloqués selon la période restante.');
+        });
+
+        // Mise à jour automatique des récompenses
+        setInterval(() => {
+            if (walletConnected && totalStaked > 0) {
+                // APY moyen MRT ~20%
+                pendingRewards += totalStaked * 0.20 / 365 / 24 / 60; 
+                document.getElementById('pendingRewards').textContent = pendingRewards.toFixed(0) + ' MRT';
+            }
+        }, 60000); // Mise à jour chaque minute
+
+        // Initialisation au chargement
+        window.addEventListener('load', () => {
+            // Vérifier si Phantom est installé
+            if (typeof window.solana !== 'undefined' && window.solana.isPhantom) {
+                phantomBtn.innerHTML = '👻 Phantom Détecté';
+                phantomBtn.style.background = 'rgba(30, 58, 138, 0.2)';
+            } else {
+                phantomBtn.innerHTML = '👻 Installer Phantom';
+                phantomBtn.onclick = () => window.open('https://phantom.app/', '_blank');
+            }
+            
+            // Vérifier si Solflare est installé
+            if (typeof window.solflare !== 'undefined') {
+                solflareBtn.innerHTML = '🔥 Solflare Détecté';
+                solflareBtn.style.background = 'rgba(251, 191, 36, 0.2)';
+            } else {
+                solflareBtn.innerHTML = '🔥 Installer Solflare';
+                solflareBtn.onclick = () => window.open('https://solflare.com/', '_blank');
+            }
+            
+            console.log('🚀 Application MRT Staking initialisée');
+            updateStats();
+        });
+    </script>
+</body>
+</html>
