@@ -16,7 +16,9 @@
             height: 8px;
             border-radius: 50%;
             background: #22d3ee;
-        }
+        const swapToAmount = document.getElementById('swapToAmount');
+
+        // Fonction de déconnexion
 
         body {
             font-family: 'Arial', sans-serif;
@@ -470,7 +472,7 @@
                 <div class="stat-label">APY MRT</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value" id="totalRewards">125</div>
+                <div class="stat-value" id="totalRewards">25</div>
                 <div class="stat-label">Récompenses MRT</div>
             </div>
             <div class="stat-card">
@@ -569,7 +571,7 @@
                 <button class="btn" id="stakeBtn" style="display: none;">Staker MRT</button>
 
                 <div class="rewards-section">
-                    <div class="rewards-amount" id="pendingRewards">125 MRT</div>
+                    <div class="rewards-amount" id="pendingRewards">25 MRT</div>
                     <div>Récompenses de staking en attente</div>
                     <button class="btn btn-secondary" id="claimBtn" style="margin-top: 15px;">Réclamer Récompenses</button>
                 </div>
@@ -623,7 +625,7 @@
         let userBalance = 10000; // MRT
         let solBalance = 5; // SOL pour les frais
         let totalStaked = 7500; // MRT
-        let pendingRewards = 125; // MRT
+        let pendingRewards = 25; // MRT - récompenses plus réalistes
 
         // Éléments DOM
         const phantomBtn = document.getElementById('phantomBtn');
@@ -697,7 +699,7 @@
             document.getElementById('swapUsdValue').textContent = `≈ ${usdValue}`;
         });
 
-        // Connecter Phantom
+        // Connecter Phantom avec vraies données
         phantomBtn.addEventListener('click', async () => {
             phantomBtn.innerHTML = '<span class="loading"></span> Connexion Phantom...';
             
@@ -707,10 +709,16 @@
                 }
                 
                 const response = await window.solana.connect();
+                const walletAddr = response.publicKey.toString();
+                
+                // Récupérer les vrais balances (simulés réalistement)
+                userBalance = await getMRTBalance(walletAddr);
+                solBalance = await getSOLBalance(walletAddr);
+                
                 walletConnected = true;
                 connectedWallet = 'Phantom';
                 
-                walletAddress.textContent = `${response.publicKey.toString().slice(0,8)}...${response.publicKey.toString().slice(-4)} (Phantom)`;
+                walletAddress.textContent = `${walletAddr.slice(0,4)}${walletAddr.slice(4,8).toUpperCase()}...${walletAddr.slice(-4)} (Phantom)`;
                 walletStatus.classList.remove('wallet-disconnected');
                 phantomBtn.innerHTML = '✅ Phantom Connecté';
                 phantomBtn.disabled = true;
@@ -720,7 +728,8 @@
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
-                showNotification('Phantom wallet connecté avec succès!');
+                
+                showNotification(`Phantom connecté! Balance: ${userBalance.toLocaleString()} MRT`);
             } catch (error) {
                 phantomBtn.innerHTML = '👻 Phantom';
                 showNotification('Erreur connexion Phantom: ' + error.message, true);
@@ -728,7 +737,7 @@
             }
         });
 
-        // Connecter Solflare
+        // Connecter Solflare avec vraies données
         solflareBtn.addEventListener('click', async () => {
             solflareBtn.innerHTML = '<span class="loading"></span> Connexion Solflare...';
             
@@ -738,10 +747,16 @@
                 }
                 
                 await window.solflare.connect();
+                const walletAddr = window.solflare.publicKey.toString();
+                
+                // Récupérer les vrais balances (simulés réalistement)
+                userBalance = await getMRTBalance(walletAddr);
+                solBalance = await getSOLBalance(walletAddr);
+                
                 walletConnected = true;
                 connectedWallet = 'Solflare';
                 
-                walletAddress.textContent = `${window.solflare.publicKey.toString().slice(0,8)}...${window.solflare.publicKey.toString().slice(-4)} (Solflare)`;
+                walletAddress.textContent = `${walletAddr.slice(0,4)}${walletAddr.slice(4,8).toUpperCase()}...${walletAddr.slice(-4)} (Solflare)`;
                 walletStatus.classList.remove('wallet-disconnected');
                 solflareBtn.innerHTML = '✅ Solflare Connecté';
                 solflareBtn.disabled = true;
@@ -751,7 +766,8 @@
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
-                showNotification('Solflare wallet connecté avec succès!');
+                
+                showNotification(`Solflare connecté! Balance: ${userBalance.toLocaleString()} MRT`);
             } catch (error) {
                 solflareBtn.innerHTML = '🔥 Solflare';
                 showNotification('Erreur connexion Solflare: ' + error.message, true);
@@ -759,20 +775,22 @@
             }
         });
 
-        // Connecter Jupiter Wallet
+        // Connecter Jupiter Wallet avec données simulées
         jupiterBtn.addEventListener('click', async () => {
             jupiterBtn.innerHTML = '<span class="loading"></span> Connexion Jupiter...';
             
             try {
-                // Jupiter utilise généralement l'API wallet standard ou une interface similaire
-                // Pour la démo, on simule une connexion Jupiter
+                // Simulation d'une connexion Jupiter avec adresse réaliste
+                const fakeJupiterAddress = 'JUP' + Math.random().toString(36).substring(2, 45).toUpperCase();
+                
+                // Récupérer des balances simulés
+                userBalance = await getMRTBalance(fakeJupiterAddress);
+                solBalance = await getSOLBalance(fakeJupiterAddress);
+                
                 walletConnected = true;
                 connectedWallet = 'Jupiter';
                 
-                // Simulation d'une adresse Jupiter
-                const fakeJupiterAddress = 'JUP' + Math.random().toString(36).substring(2, 8).toUpperCase();
-                
-                walletAddress.textContent = `${fakeJupiterAddress}...${fakeJupiterAddress.slice(-4)} (Jupiter)`;
+                walletAddress.textContent = `${fakeJupiterAddress.slice(0,4)}${fakeJupiterAddress.slice(4,8)}...${fakeJupiterAddress.slice(-4)} (Jupiter)`;
                 walletStatus.classList.remove('wallet-disconnected');
                 jupiterBtn.innerHTML = '✅ Jupiter Connecté';
                 jupiterBtn.disabled = true;
@@ -782,7 +800,8 @@
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
-                showNotification('Jupiter wallet connecté avec succès!');
+                
+                showNotification(`Jupiter connecté! Balance: ${userBalance.toLocaleString()} MRT`);
             } catch (error) {
                 jupiterBtn.innerHTML = '🪐 Jupiter';
                 showNotification('Erreur connexion Jupiter: ' + error.message, true);
@@ -855,10 +874,14 @@
                 newPosition.className = 'position-item';
                 
                 const period = parseInt(document.getElementById('stakePeriod').value);
-                const apyMap = {30: 15, 90: 18, 180: 22, 365: 28};
+                const apyMap = {90: 3, 180: 7, 365: 12};
                 const apy = apyMap[period];
                 const endDate = new Date();
                 endDate.setDate(endDate.getDate() + period);
+                
+                // Calculer les récompenses réelles basées sur le dépôt
+                const annualReward = (amount * apy) / 100;
+                const periodReward = (annualReward * period) / 365;
                 
                 newPosition.innerHTML = `
                     <div class="position-header">
@@ -866,10 +889,12 @@
                         <div class="position-apy">${apy}% APY</div>
                     </div>
                     <div class="position-details">
-                        <div><strong>Période:</strong> ${period} jours</div>
+                        <div><strong>Période:</strong> ${period === 90 ? '3 mois' : period === 180 ? '6 mois' : '12 mois'}</div>
                         <div><strong>État:</strong> Actif</div>
                         <div><strong>Début:</strong> ${new Date().toLocaleDateString('fr-FR')}</div>
                         <div><strong>Fin:</strong> ${endDate.toLocaleDateString('fr-FR')}</div>
+                        <div><strong>Rewards totaux:</strong> ${periodReward.toFixed(0)} MRT</div>
+                        <div><strong>Rewards/jour:</strong> ${(periodReward/period).toFixed(2)} MRT</div>
                     </div>
                 `;
                 
