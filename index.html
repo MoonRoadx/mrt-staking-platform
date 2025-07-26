@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 50%, #fbbf24 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -27,13 +27,13 @@
         }
 
         header {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 30px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(34, 211, 238, 0.3);
         }
 
         h1 {
@@ -83,18 +83,19 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 25px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(34, 211, 238, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.3);
+            border-color: rgba(34, 211, 238, 0.5);
         }
 
         .stat-value {
@@ -117,15 +118,15 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 23, 42, 0.9);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(34, 211, 238, 0.2);
         }
 
         .card h2 {
-            color: #4a5568;
+            color: #22d3ee;
             margin-bottom: 20px;
             font-size: 1.8rem;
         }
@@ -138,26 +139,29 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #4a5568;
+            color: #22d3ee;
         }
 
         .form-group input, .form-group select {
             width: 100%;
             padding: 15px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(34, 211, 238, 0.3);
             border-radius: 10px;
             font-size: 1rem;
             transition: border-color 0.3s ease;
+            background: rgba(15, 23, 42, 0.7);
+            color: #f1f5f9;
         }
 
         .form-group input:focus, .form-group select:focus {
             outline: none;
-            border-color: #0891b2;
+            border-color: #22d3ee;
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
         }
 
         .btn {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%);
-            color: white;
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+            color: #0f172a;
             border: none;
             padding: 15px 30px;
             border-radius: 10px;
@@ -170,7 +174,7 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(8, 145, 178, 0.4);
+            box-shadow: 0 5px 15px rgba(34, 211, 238, 0.4);
         }
 
         .btn:disabled {
@@ -185,14 +189,15 @@
         }
 
         .jupiter-section {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%);
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
+            border: 1px solid rgba(34, 211, 238, 0.2);
         }
 
         .jupiter-section h3 {
-            color: #1e3a8a;
+            color: #22d3ee;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -209,22 +214,25 @@
         .swap-input {
             flex: 1;
             padding: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(34, 211, 238, 0.3);
             border-radius: 8px;
             font-size: 1rem;
+            background: rgba(15, 23, 42, 0.7);
+            color: #f1f5f9;
         }
 
         .swap-arrow {
             font-size: 1.5rem;
-            color: #1e3a8a;
+            color: #22d3ee;
         }
 
         .wallet-status {
-            background: #f7fafc;
+            background: rgba(15, 23, 42, 0.6);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
-            border-left: 4px solid #48bb78;
+            border-left: 4px solid #22d3ee;
+            color: #f1f5f9;
         }
 
         .wallet-disconnected {
@@ -237,11 +245,12 @@
         }
 
         .position-item {
-            background: #f7fafc;
+            background: rgba(15, 23, 42, 0.6);
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 15px;
-            border-left: 4px solid #0891b2;
+            border-left: 4px solid #22d3ee;
+            color: #f1f5f9;
         }
 
         .position-header {
@@ -254,7 +263,7 @@
         .position-amount {
             font-size: 1.3rem;
             font-weight: bold;
-            color: #2d3748;
+            color: #22d3ee;
         }
 
         .position-apy {
@@ -271,21 +280,22 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             font-size: 0.9rem;
-            color: #718096;
+            color: #94a3b8;
         }
 
         .rewards-section {
-            background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(34, 211, 238, 0.1) 100%);
             border-radius: 15px;
             padding: 20px;
             margin-top: 20px;
             text-align: center;
+            border: 1px solid rgba(251, 191, 36, 0.3);
         }
 
         .rewards-amount {
             font-size: 2rem;
             font-weight: bold;
-            color: #1e3a8a;
+            color: #fbbf24;
             margin-bottom: 10px;
         }
 
@@ -349,8 +359,8 @@
         }
 
         .solana-badge {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%);
-            color: white;
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+            color: #0f172a;
             padding: 4px 8px;
             border-radius: 12px;
             font-size: 0.7rem;
@@ -369,7 +379,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #48bb78;
+            background: #22d3ee;
         }
     </style>
 </head>
@@ -377,12 +387,12 @@
     <div class="container">
         <header>
             <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 15px;">
-                <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24 0%, #0fb6d6 50%, #0891b2 100%); display: flex; align-items: center; justify-content: center; position: relative; border: 3px solid rgba(255,255,255,0.3);">
-                    <div style="font-size: 24px; font-weight: bold; color: #112341;">M</div>
+                <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #22d3ee 0%, #fbbf24 50%, #0891b2 100%); display: flex; align-items: center; justify-content: center; position: relative; border: 3px solid rgba(34, 211, 238, 0.3);">
+                    <div style="font-size: 24px; font-weight: bold; color: #0f172a;">M</div>
                     <div style="position: absolute; bottom: -5px; right: -5px; width: 25px; height: 25px; background: linear-gradient(45deg, #22d3ee, #0fb6d6); border-radius: 8px; display: flex; align-items: center; justify-content: center; transform: rotate(-45deg);">
                         <div style="width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 8px solid #fbbf24; transform: rotate(45deg);"></div>
                     </div>
-                    <div style="position: absolute; bottom: -8px; right: 2px; font-size: 6px; color: #f9fafb; font-weight: bold; writing-mode: vertical-rl; text-orientation: mixed;">MOONROAD</div>
+                    <div style="position: absolute; bottom: -8px; right: 2px; font-size: 6px; color: #22d3ee; font-weight: bold; writing-mode: vertical-rl; text-orientation: mixed;">MOONROAD</div>
                 </div>
                 <h1>MasterStake</h1>
             </div>
