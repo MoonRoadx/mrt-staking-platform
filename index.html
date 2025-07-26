@@ -1,3 +1,6 @@
+Scalpeuse, [26/07/2025 16:31]
+Exactement ! Le script est maintenant 100% à jour et s'adapte automatiquement entre ordinateur et mobile. Voici le code complet :
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,11 +14,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #22d3ee;
         }
 
         body {
@@ -29,6 +27,25 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+        }
+
+        .demo-banner {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #0f172a;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(251, 191, 36, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
         }
 
         header {
@@ -103,6 +120,70 @@
         .disconnect-btn:hover {
             background: rgba(239, 68, 68, 0.3);
             transform: translateY(-1px);
+        }
+
+        .mobile-wallet-connect {
+            display: none;
+        }
+
+        .mobile-wallet-btn {
+            background: rgba(34, 211, 238, 0.2);
+            border: 2px solid #22d3ee;
+
+Scalpeuse, [26/07/2025 16:31]
+padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            font-weight: 600;
+            color: #22d3ee;
+            margin-bottom: 15px;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .mobile-wallet-btn:hover {
+            background: rgba(34, 211, 238, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .wallet-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .wallet-status-badge {
+            background: rgba(34, 211, 238, 0.3);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .mobile-instructions {
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .qr-placeholder {
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px auto;
+            border: 2px dashed #22d3ee;
         }
 
         .stats-grid {
@@ -191,7 +272,9 @@
 
         .btn {
             background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
-            color: #0f172a;
+
+Scalpeuse, [26/07/2025 16:31]
+color: #0f172a;
             border: none;
             padding: 15px 30px;
             border-radius: 10px;
@@ -330,7 +413,25 @@
         }
 
         @media (max-width: 768px) {
-            .main-content {
+            .wallet-selector {
+                display: none;
+            }
+            
+            .mobile-wallet-connect {
+                display: block;
+            }
+            
+            .mobile-wallet-btn {
+                font-size: 1.1rem;
+                padding: 18px 20px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+
+Scalpeuse, [26/07/2025 16:31]
+.main-content {
                 grid-template-columns: 1fr;
             }
             
@@ -340,16 +441,6 @@
             
             .stats-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .wallet-selector {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .wallet-btn {
-                width: 200px;
-                justify-content: center;
             }
         }
 
@@ -405,23 +496,11 @@
             font-size: 0.9rem;
         }
 
-        .demo-banner {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: #0f172a;
-            padding: 12px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 2px solid rgba(251, 191, 36, 0.5);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22d3ee;
         }
     </style>
 </head>
@@ -450,6 +529,65 @@
                 </button>
                 <button class="disconnect-btn" id="disconnectBtn" style="display: none;" onclick="disconnectWallet()">
                     🔌 Déconnecter
+                </button>
+            </div>
+
+            <!-- Interface mobile pour connexion wallet -->
+            <div class="mobile-wallet-connect" id="mobileWalletConnect">
+                <div class="mobile-instructions">
+                    📱 Connexion mobile : Cliquez sur votre wallet pour ouvrir l'app et vous connecter
+                </div>
+                
+                <a href="#" class="mobile-wallet-btn" id="mobilePhantomBtn">
+                    <div class="wallet-info">
+                        <span style="font-size: 24px;">👻</span>
+                        <div>
+                            <div>Phantom Wallet</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Ouvrir l'app Phantom</div>
+                        </div>
+                    </div>
+                    <span class="wallet-status-badge" id="phantomStatus">Installer</span>
+                </a>
+                
+                <a href="#" class="mobile-wallet-btn" id="mobileSolflareBtn">
+
+Scalpeuse, [26/07/2025 16:31]
+<div class="wallet-info">
+                        <span style="font-size: 24px;">🔥</span>
+                        <div>
+                            <div>Solflare Wallet</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Ouvrir l'app Solflare</div>
+                        </div>
+                    </div>
+                    <span class="wallet-status-badge" id="solflareStatus">Installer</span>
+                </a>
+                
+                <div class="mobile-wallet-btn" id="mobileQRBtn" style="cursor: pointer;">
+                    <div class="wallet-info">
+                        <span style="font-size: 24px;">📱</span>
+                        <div>
+                            <div>QR Code</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Scanner avec votre wallet</div>
+                        </div>
+                    </div>
+                    <span class="wallet-status-badge">Scanner</span>
+                </div>
+                
+                <div class="mobile-instructions" id="qrSection" style="display: none;">
+                    <div style="text-align: center;">
+                        <div class="qr-placeholder">
+                            <div style="text-align: center; color: #666;">
+                                <div style="font-size: 2rem;">📱</div>
+                                <div>QR Code</div>
+                                <div style="font-size: 0.8rem;">Connexion wallet</div>
+                            </div>
+                        </div>
+                        <p>Scannez ce QR code avec l'app de votre wallet Solana pour vous connecter</p>
+                    </div>
+                </div>
+                
+                <button class="disconnect-btn" id="mobileDisconnectBtn" style="display: none; width: 100%;" onclick="disconnectWallet()">
+                    🔌 Déconnecter le wallet
                 </button>
             </div>
 
@@ -499,7 +637,9 @@
         </div>
 
         <div class="main-content">
-            <div class="card">
+
+Scalpeuse, [26/07/2025 16:31]
+<div class="card">
                 <h2>🚀 Staker vos MRT</h2>
                 
                 <div class="wallet-status wallet-disconnected" id="walletStatus">
@@ -510,461 +650,4 @@
                     <strong>Balance SOL:</strong> <span id="solBalanceForFees">0 SOL</span>
                     <br>
                     <div style="background: rgba(16, 185, 129, 0.1); padding: 8px; border-radius: 6px; margin-top: 8px;">
-                        <small style="color: #10b981; font-weight: 600;">
-                            💹 MRT: $0.00000538
-                        </small>
-                        <br>
-                        <small style="color: #666; font-size: 0.75rem;">
-                            MC: $114k | Liquidité: $11.4k | 88 holders
-                        </small>
-                        <br>
-                        <small style="color: #666; font-size: 0.75rem;">
-                            Mint: BAXJcX7yaNyXWmDycpCF9xPpDx67UWcVhC68rCnYukJd
-                        </small>
-                    </div>
-                </div>
-
-                <div class="jupiter-section">
-                    <h3>🪐 Jupiter Swap</h3>
-                    <p style="font-size: 0.9rem; color: #1e3a8a; margin-bottom: 15px;">
-                        Swappez vos tokens vers MRT avant de staker
-                    </p>
-                    <div class="swap-container">
-                        <input type="number" class="swap-input" placeholder="Montant" id="swapFromAmount">
-                        <select class="swap-input" id="swapFromToken">
-                            <option value="SOL">SOL</option>
-                            <option value="USDC">USDC</option>
-                            <option value="USDT">USDT</option>
-                            <option value="RAY">RAY</option>
-                        </select>
-                        <div class="swap-arrow">→</div>
-                        <input type="number" class="swap-input" placeholder="Reçu" id="swapToAmount" readonly>
-                        <select class="swap-input" id="swapToToken">
-                            <option value="MRT" selected>MRT</option>
-                        </select>
-                    </div>
-                    <div style="text-align: center; margin: 10px 0; color: #1e3a8a; font-size: 0.9rem;">
-                        <span id="swapUsdValue">≈ $0.00</span>
-                    </div>
-                    <button class="btn" id="jupiterSwapBtn" style="margin-top: 10px;">
-                        Swap vers MRT via Jupiter
-                    </button>
-                </div>
-
-                <div class="form-group">
-                    <label for="stakeAmount">Montant MRT à staker</label>
-                    <input type="number" id="stakeAmount" placeholder="Entrez le montant MRT..." min="1" step="1">
-                </div>
-
-                <div class="form-group">
-                    <label for="stakePeriod">Période de staking</label>
-                    <select id="stakePeriod">
-                        <option value="90" selected>3 mois - 3% APY</option>
-                        <option value="180">6 mois - 7% APY</option>
-                        <option value="365">12 mois - 12% APY</option>
-                    </select>
-                </div>
-
-                <button class="btn" id="connectWallet">Connecter Wallet</button>
-                <button class="btn" id="stakeBtn" style="display: none;">Staker MRT</button>
-
-                <div class="rewards-section">
-                    <div class="rewards-amount" id="pendingRewards">25 MRT</div>
-                    <div>Récompenses de staking en attente</div>
-                    <button class="btn btn-secondary" id="claimBtn" style="margin-top: 15px;">Réclamer Récompenses</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>📊 Mes Stakes MRT</h2>
-                
-                <div class="positions-list" id="positionsList">
-                    <div class="position-item">
-                        <div class="position-header">
-                            <div class="position-amount">5,000 MRT</div>
-                            <div class="position-apy">3% APY</div>
-                        </div>
-                        <div class="position-details">
-                            <div><strong>Période:</strong> 3 mois</div>
-                            <div><strong>État:</strong> Actif</div>
-                            <div><strong>Début:</strong> 15/07/2025</div>
-                            <div><strong>Fin:</strong> 15/10/2025</div>
-                        </div>
-                    </div>
-
-                    <div class="position-item">
-                        <div class="position-header">
-                            <div class="position-amount">2,500 MRT</div>
-                            <div class="position-apy">7% APY</div>
-                        </div>
-                        <div class="position-details">
-                            <div><strong>Période:</strong> 6 mois</div>
-                            <div><strong>État:</strong> Actif</div>
-                            <div><strong>Début:</strong> 01/07/2025</div>
-                            <div><strong>Fin:</strong> 01/01/2026</div>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="btn btn-secondary" id="undelegateBtn">Unstaker Position</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="notification" id="notification"></div>
-
-    <script>
-        // Configuration
-        const MRT_MINT_ADDRESS = 'BAXJcX7yaNyXWmDycpCF9xPpDx67UWcVhC68rCnYukJd';
-        
-        // Variables globales
-        let walletConnected = false;
-        let connectedWallet = null;
-        let userBalance = 100000000; // MRT
-        let solBalance = 2.74; // SOL pour les frais
-        let totalStaked = 7500; // MRT
-        let pendingRewards = 25; // MRT - récompenses plus réalistes
-
-        // Éléments DOM
-        const phantomBtn = document.getElementById('phantomBtn');
-        const solflareBtn = document.getElementById('solflareBtn');
-        const jupiterBtn = document.getElementById('jupiterBtn');
-        const connectWalletBtn = document.getElementById('connectWallet');
-        const stakeBtn = document.getElementById('stakeBtn');
-        const claimBtn = document.getElementById('claimBtn');
-        const undelegateBtn = document.getElementById('undelegateBtn');
-        const jupiterSwapBtn = document.getElementById('jupiterSwapBtn');
-        const walletStatus = document.getElementById('walletStatus');
-        const walletAddress = document.getElementById('walletAddress');
-        const solBalance_el = document.getElementById('solBalance');
-        const solBalanceForFees = document.getElementById('solBalanceForFees');
-        const stakeAmount = document.getElementById('stakeAmount');
-        const notification = document.getElementById('notification');
-        const swapFromAmount = document.getElementById('swapFromAmount');
-        const disconnectBtn = document.getElementById('disconnectBtn');
-
-        // Mise à jour des statistiques
-        function updateStats() {
-            const mrtPrice = 0.00000538;
-            document.getElementById('totalStaked').textContent = totalStaked.toLocaleString();
-            document.getElementById('totalRewards').textContent = pendingRewards.toLocaleString();
-            document.getElementById('pendingRewards').textContent = pendingRewards.toFixed(0) + ' MRT';
-            document.getElementById('solBalance').textContent = userBalance.toLocaleString() + ' MRT';
-            document.getElementById('solBalanceForFees').textContent = solBalance.toFixed(2) + ' SOL';
-            
-            // Mettre à jour la valeur USD du balance
-            const usdValue = (userBalance * mrtPrice).toFixed(6);
-            const balanceElement = document.getElementById('solBalance');
-            const usdSpan = balanceElement.nextElementSibling;
-            if (usdSpan) {
-                usdSpan.textContent = `(${usdValue})`;
-            }
-        }
-
-        // Afficher une notification
-        function showNotification(message, isError = false) {
-            notification.textContent = message;
-            notification.className = 'notification show' + (isError ? ' error' : '');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        // Simuler les taux de swap Jupiter vers MRT
-        swapFromAmount.addEventListener('input', () => {
-            const amount = parseFloat(swapFromAmount.value) || 0;
-            const fromToken = document.getElementById('swapFromToken').value;
-            
-            // Taux basés sur le prix MRT réel: $0.00000538
-            const mrtPriceUSD = 0.00000538;
-            const solPriceUSD = 188.36;
-            const usdcPrice = 1.0;
-            const usdtPrice = 1.0;
-            const rayPriceUSD = 2.5;
-            
-            const rates = {
-                'SOL': solPriceUSD / mrtPriceUSD,      // ~35,007,434 MRT par SOL
-                'USDC': usdcPrice / mrtPriceUSD,       // ~185,873 MRT par USDC
-                'USDT': usdtPrice / mrtPriceUSD,       // ~185,873 MRT par USDT
-                'RAY': rayPriceUSD / mrtPriceUSD        // ~464,684 MRT par RAY
-            };
-            
-            const mrtAmount = amount * (rates[fromToken] || 0);
-            swapToAmount.value = mrtAmount.toFixed(0);
-            
-            // Afficher la valeur USD estimée
-            const usdValue = (mrtAmount * mrtPriceUSD).toFixed(6);
-            document.getElementById('swapUsdValue').textContent = `≈ ${usdValue}`;
-        });
-
-        // Connecter Phantom
-        phantomBtn.addEventListener('click', async () => {
-            phantomBtn.innerHTML = '<span class="loading"></span> Connexion Phantom...';
-            
-            try {
-                if (!window.solana || !window.solana.isPhantom) {
-                    throw new Error('Phantom wallet non installé');
-                }
-                
-                const response = await window.solana.connect();
-                walletConnected = true;
-                connectedWallet = 'Phantom';
-                
-                walletAddress.textContent = `${response.publicKey.toString().slice(0,8)}...${response.publicKey.toString().slice(-4)} (Phantom)`;
-                walletStatus.classList.remove('wallet-disconnected');
-                phantomBtn.innerHTML = '✅ Phantom Connecté';
-                phantomBtn.disabled = true;
-                solflareBtn.style.display = 'none';
-                jupiterBtn.style.display = 'none';
-                disconnectBtn.style.display = 'block';
-                connectWalletBtn.style.display = 'none';
-                stakeBtn.style.display = 'block';
-                updateStats();
-                showNotification('Phantom wallet connecté avec succès!');
-            } catch (error) {
-                phantomBtn.innerHTML = '👻 Phantom';
-                showNotification('Erreur connexion Phantom: ' + error.message, true);
-                console.error('Erreur Phantom:', error);
-            }
-        });
-
-        // Connecter Solflare
-        solflareBtn.addEventListener('click', async () => {
-            solflareBtn.innerHTML = '<span class="loading"></span> Connexion Solflare...';
-            
-            try {
-                if (!window.solflare) {
-                    throw new Error('Solflare wallet non installé');
-                }
-                
-                await window.solflare.connect();
-                walletConnected = true;
-                connectedWallet = 'Solflare';
-                
-                walletAddress.textContent = `${window.solflare.publicKey.toString().slice(0,8)}...${window.solflare.publicKey.toString().slice(-4)} (Solflare)`;
-                walletStatus.classList.remove('wallet-disconnected');
-                solflareBtn.innerHTML = '✅ Solflare Connecté';
-                solflareBtn.disabled = true;
-                phantomBtn.style.display = 'none';
-                jupiterBtn.style.display = 'none';
-                disconnectBtn.style.display = 'block';
-                connectWalletBtn.style.display = 'none';
-                stakeBtn.style.display = 'block';
-                updateStats();
-                showNotification('Solflare wallet connecté avec succès!');
-            } catch (error) {
-                solflareBtn.innerHTML = '🔥 Solflare';
-                showNotification('Erreur connexion Solflare: ' + error.message, true);
-                console.error('Erreur Solflare:', error);
-            }
-        });
-
-        // Connecter Jupiter Wallet
-        jupiterBtn.addEventListener('click', async () => {
-            jupiterBtn.innerHTML = '<span class="loading"></span> Connexion Jupiter...';
-            
-            try {
-                // Jupiter utilise généralement l'API wallet standard ou une interface similaire
-                // Pour la démo, on simule une connexion Jupiter
-                walletConnected = true;
-                connectedWallet = 'Jupiter';
-                
-                // Simulation d'une adresse Jupiter
-                const fakeJupiterAddress = 'JUP' + Math.random().toString(36).substring(2, 8).toUpperCase();
-                
-                walletAddress.textContent = `${fakeJupiterAddress}...${fakeJupiterAddress.slice(-4)} (Jupiter)`;
-                walletStatus.classList.remove('wallet-disconnected');
-                jupiterBtn.innerHTML = '✅ Jupiter Connecté';
-                jupiterBtn.disabled = true;
-                phantomBtn.style.display = 'none';
-                solflareBtn.style.display = 'none';
-                disconnectBtn.style.display = 'block';
-                connectWalletBtn.style.display = 'none';
-                stakeBtn.style.display = 'block';
-                updateStats();
-                showNotification('Jupiter wallet connecté avec succès!');
-            } catch (error) {
-                jupiterBtn.innerHTML = '🪐 Jupiter';
-                showNotification('Erreur connexion Jupiter: ' + error.message, true);
-                console.error('Erreur Jupiter:', error);
-            }
-        });
-
-        // Bouton déconnexion - supprimé d'ici car ajouté dans window.load
-
-        // Bouton connecter wallet générique
-        connectWalletBtn.addEventListener('click', () => {
-            showNotification('Veuillez cliquer sur Phantom ou Solflare pour vous connecter', true);
-        });
-
-        // Jupiter Swap
-        jupiterSwapBtn.addEventListener('click', () => {
-            const fromAmount = parseFloat(swapFromAmount.value);
-            const toAmount = parseFloat(swapToAmount.value);
-            
-            if (!fromAmount || fromAmount <= 0) {
-                showNotification('Veuillez entrer un montant valide à swapper', true);
-                return;
-            }
-
-            if (!walletConnected) {
-                showNotification('Veuillez connecter votre wallet d\'abord', true);
-                return;
-            }
-
-            jupiterSwapBtn.innerHTML = '<span class="loading"></span> Swap en cours...';
-            
-            setTimeout(() => {
-                userBalance += toAmount;
-                jupiterSwapBtn.innerHTML = 'Swap vers MRT via Jupiter';
-                swapFromAmount.value = '';
-                swapToAmount.value = '';
-                updateStats();
-                showNotification(`Swap réussi! +${toAmount.toFixed(0)} MRT reçus (≈${(toAmount * 0.00000538).toFixed(6)})`);
-            }, 3000);
-        });
-
-        // Staker des MRT
-        stakeBtn.addEventListener('click', () => {
-            const amount = parseFloat(stakeAmount.value);
-            
-            if (!amount || amount <= 0) {
-                showNotification('Veuillez entrer un montant MRT valide', true);
-                return;
-            }
-            
-            if (amount > userBalance) {
-                showNotification('Solde MRT insuffisant', true);
-                return;
-            }
-
-            if (amount < 100) {
-                showNotification('Montant minimum: 100 MRT', true);
-                return;
-            }
-
-            stakeBtn.innerHTML = '<span class="loading"></span> Staking en cours...';
-            
-            setTimeout(() => {
-                userBalance -= amount;
-                totalStaked += amount;
-                
-                // Ajouter une nouvelle position de staking
-                const positionsList = document.getElementById('positionsList');
-                const newPosition = document.createElement('div');
-                newPosition.className = 'position-item';
-                
-                const period = parseInt(document.getElementById('stakePeriod').value);
-                const apyMap = {90: 3, 180: 7, 365: 12};
-                const apy = apyMap[period];
-                const endDate = new Date();
-                endDate.setDate(endDate.getDate() + period);
-                
-                // Calculer les récompenses réelles basées sur le dépôt
-                const annualReward = (amount * apy) / 100;
-                const periodReward = (annualReward * period) / 365;
-                
-                newPosition.innerHTML = `
-                    <div class="position-header">
-                        <div class="position-amount">${amount.toLocaleString()} MRT</div>
-                        <div class="position-apy">${apy}% APY</div>
-                    </div>
-                    <div class="position-details">
-                        <div><strong>Période:</strong> ${period === 90 ? '3 mois' : period === 180 ? '6 mois' : '12 mois'}</div>
-                        <div><strong>État:</strong> Actif</div>
-                        <div><strong>Début:</strong> ${new Date().toLocaleDateString('fr-FR')}</div>
-                        <div><strong>Fin:</strong> ${endDate.toLocaleDateString('fr-FR')}</div>
-                        <div><strong>Rewards totaux:</strong> ${periodReward.toFixed(0)} MRT</div>
-                        <div><strong>Rewards/jour:</strong> ${(periodReward/period).toFixed(2)} MRT</div>
-                    </div>
-                `;
-                
-                positionsList.prepend(newPosition);
-                
-                stakeAmount.value = '';
-                stakeBtn.innerHTML = 'Staker MRT';
-                updateStats();
-                const usdValue = (amount * 0.00000538).toFixed(6);
-                showNotification(`${amount.toLocaleString()} MRT stakés (≈${usdValue})! APY: ${apy}%`);
-            }, 3000);
-        });
-
-        // Réclamer les récompenses
-        claimBtn.addEventListener('click', () => {
-            if (pendingRewards <= 0) {
-                showNotification('Aucune récompense à réclamer', true);
-                return;
-            }
-
-            claimBtn.innerHTML = '<span class="loading"></span> Réclamation...';
-            
-            setTimeout(() => {
-                userBalance += pendingRewards;
-                const usdValue = (pendingRewards * 0.00000538).toFixed(6);
-                pendingRewards = 0;
-                claimBtn.innerHTML = 'Réclamer Récompenses';
-                updateStats();
-                showNotification(`Récompenses réclamées! +${usdValue} en MRT`);
-            }, 2000);
-        });
-
-        // Unstaker
-        undelegateBtn.addEventListener('click', () => {
-            showNotification('Sélectionnez une position pour unstaker. Les tokens seront débloqués selon la période restante.');
-        });
-
-        // Mise à jour automatique des récompenses
-        setInterval(() => {
-            if (walletConnected && totalStaked > 0) {
-                // APY moyen MRT ~20%
-                pendingRewards += totalStaked * 0.20 / 365 / 24 / 60; 
-                document.getElementById('pendingRewards').textContent = pendingRewards.toFixed(0) + ' MRT';
-            }
-        }, 60000); // Mise à jour chaque minute
-
-        // Initialisation au chargement
-        window.addEventListener('load', () => {
-            console.log('🚀 Chargement de l\'application...');
-            
-            // Vérifier que tous les éléments existent
-            console.log('Bouton déconnexion trouvé:', disconnectBtn);
-            
-            // Ajouter l'événement de déconnexion ici pour être sûr
-            if (disconnectBtn) {
-                disconnectBtn.addEventListener('click', function() {
-                    console.log('🔌 Clic déconnexion détecté!');
-                    disconnectWallet();
-                });
-                console.log('✅ Event listener déconnexion ajouté');
-            } else {
-                console.error('❌ Bouton déconnexion non trouvé!');
-            }
-            
-            // Vérifier si Phantom est installé
-            if (typeof window.solana !== 'undefined' && window.solana.isPhantom) {
-                phantomBtn.innerHTML = '👻 Phantom Détecté';
-                phantomBtn.style.background = 'rgba(34, 211, 238, 0.3)';
-            } else {
-                phantomBtn.innerHTML = '👻 Installer Phantom';
-                phantomBtn.onclick = () => window.open('https://phantom.app/', '_blank');
-            }
-            
-            // Vérifier si Solflare est installé
-            if (typeof window.solflare !== 'undefined') {
-                solflareBtn.innerHTML = '🔥 Solflare Détecté';
-                solflareBtn.style.background = 'rgba(34, 211, 238, 0.3)';
-            } else {
-                solflareBtn.innerHTML = '🔥 Installer Solflare';
-                solflareBtn.onclick = () => window.open('https://solflare.com/', '_blank');
-            }
-            
-            // Jupiter wallet setup
-            jupiterBtn.innerHTML = '🪐 Jupiter Wallet';
-            jupiterBtn.style.background = 'rgba(34, 211, 238, 0.2)';
-            
-            console.log('🚀 Application MRT Staking initialisée');
-            updateStats();
-        });
-    </script>
-</body>
-</html>
+                        <small style="color: #10b9
