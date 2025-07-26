@@ -16,81 +16,6 @@
             height: 8px;
             border-radius: 50%;
             background: #22d3ee;
-        // Détection mobile
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-        }
-
-        // Fonction pour générer les deep links wallet
-        function generateWalletDeepLink(walletType, action = 'connect') {
-            const currentUrl = encodeURIComponent(window.location.href);
-            
-            switch(walletType) {
-                case 'phantom':
-                    return `https://phantom.app/ul/browse/${currentUrl}?ref=masterstake`;
-                case 'solflare':
-                    return `https://solflare.com/access-wallet?url=${currentUrl}`;
-                default:
-                    return '#';
-            }
-        }
-
-        // Gestion de la connexion mobile
-        function handleMobileWalletConnection(walletType) {
-            if (isMobile()) {
-                // Tentative de connexion via deep link
-                const deepLink = generateWalletDeepLink(walletType);
-                
-                // Simuler une connexion mobile réussie après 3 secondes
-                setTimeout(() => {
-                    simulateMobileConnection(walletType);
-                }, 3000);
-                
-                // Ouvrir l'app wallet
-                window.location.href = deepLink;
-            }
-        }
-
-        // Simuler une connexion mobile
-        async function simulateMobileConnection(walletType) {
-            try {
-                // Générer une adresse simulée
-                const fakeAddress = generateFakeAddress(walletType);
-                
-                // Récupérer des balances simulés
-                userBalance = await getMRTBalance(fakeAddress);
-                solBalance = await getSOLBalance(fakeAddress);
-                
-                walletConnected = true;
-                connectedWallet = walletType;
-                
-                // Mettre à jour l'interface
-                walletAddress.textContent = `${fakeAddress.slice(0,4)}${fakeAddress.slice(4,8).toUpperCase()}...${fakeAddress.slice(-4)} (${walletType})`;
-                walletStatus.classList.remove('wallet-disconnected');
-                
-                // Cacher les boutons de connexion mobile
-                document.getElementById('mobileWalletConnect').style.display = 'none';
-                mobileDisconnectBtn.style.display = 'block';
-                connectWalletBtn.style.display = 'none';
-                stakeBtn.style.display = 'block';
-                
-                updateStats();
-                showNotification(`${walletType} connecté! Balance: ${userBalance.toLocaleString()} MRT`);
-            } catch (error) {
-                showNotification('Erreur connexion mobile: ' + error.message, true);
-            }
-        }
-
-        // Générer une adresse fake selon le type de wallet
-        function generateFakeAddress(walletType) {
-            const prefixes = {
-                'phantom': 'J3ch',
-                'solflare': 'Sf4x',
-                'jupiter': 'JUP'
-            };
-            
-            const prefix = prefixes[walletType] || 'Sol';
-            return prefix + Math.random().toString(36).substring(2, 45).toUpperCase();
         }
 
         body {
@@ -404,84 +329,27 @@
             margin-bottom: 10px;
         }
 
-        .mobile-wallet-connect {
-            display: none;
-        }
-
-        .mobile-wallet-btn {
-            background: rgba(34, 211, 238, 0.2);
-            border: 2px solid #22d3ee;
-            padding: 15px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            font-weight: 600;
-            color: #22d3ee;
-            margin-bottom: 15px;
-            text-decoration: none;
-            width: 100%;
-        }
-
-        .mobile-wallet-btn:hover {
-            background: rgba(34, 211, 238, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .wallet-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .wallet-status-badge {
-            background: rgba(34, 211, 238, 0.3);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-        }
-
-        .mobile-instructions {
-            background: rgba(34, 211, 238, 0.1);
-            border: 1px solid rgba(34, 211, 238, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-
-        .qr-placeholder {
-            width: 150px;
-            height: 150px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 15px auto;
-            border: 2px dashed #22d3ee;
-        }
-
         @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
             .wallet-selector {
-                display: none;
+                flex-direction: column;
+                align-items: center;
             }
-            
-            .mobile-wallet-connect {
-                display: block;
-            }
-            
-            .mobile-wallet-btn {
-                font-size: 1.1rem;
-                padding: 18px 20px;
-            }
-            
-            .card {
-                padding: 20px;
+
+            .wallet-btn {
+                width: 200px;
+                justify-content: center;
             }
         }
 
@@ -582,63 +450,6 @@
                 </button>
                 <button class="disconnect-btn" id="disconnectBtn" style="display: none;" onclick="disconnectWallet()">
                     🔌 Déconnecter
-                </button>
-            </div>
-
-            <!-- Interface mobile pour connexion wallet -->
-            <div class="mobile-wallet-connect" id="mobileWalletConnect">
-                <div class="mobile-instructions">
-                    📱 Connexion mobile : Cliquez sur votre wallet pour ouvrir l'app et vous connecter
-                </div>
-                
-                <a href="#" class="mobile-wallet-btn" id="mobilePhantomBtn">
-                    <div class="wallet-info">
-                        <span style="font-size: 24px;">👻</span>
-                        <div>
-                            <div>Phantom Wallet</div>
-                            <div style="font-size: 0.8rem; opacity: 0.7;">Ouvrir l'app Phantom</div>
-                        </div>
-                    </div>
-                    <span class="wallet-status-badge" id="phantomStatus">Installer</span>
-                </a>
-                
-                <a href="#" class="mobile-wallet-btn" id="mobileSolflareBtn">
-                    <div class="wallet-info">
-                        <span style="font-size: 24px;">🔥</span>
-                        <div>
-                            <div>Solflare Wallet</div>
-                            <div style="font-size: 0.8rem; opacity: 0.7;">Ouvrir l'app Solflare</div>
-                        </div>
-                    </div>
-                    <span class="wallet-status-badge" id="solflareStatus">Installer</span>
-                </a>
-                
-                <div class="mobile-wallet-btn" id="mobileQRBtn" style="cursor: pointer;">
-                    <div class="wallet-info">
-                        <span style="font-size: 24px;">📱</span>
-                        <div>
-                            <div>QR Code</div>
-                            <div style="font-size: 0.8rem; opacity: 0.7;">Scanner avec votre wallet</div>
-                        </div>
-                    </div>
-                    <span class="wallet-status-badge">Scanner</span>
-                </div>
-                
-                <div class="mobile-instructions" id="qrSection" style="display: none;">
-                    <div style="text-align: center;">
-                        <div class="qr-placeholder">
-                            <div style="text-align: center; color: #666;">
-                                <div style="font-size: 2rem;">📱</div>
-                                <div>QR Code</div>
-                                <div style="font-size: 0.8rem;">Connexion wallet</div>
-                            </div>
-                        </div>
-                        <p>Scannez ce QR code avec l'app de votre wallet Solana pour vous connecter</p>
-                    </div>
-                </div>
-                
-                <button class="disconnect-btn" id="mobileDisconnectBtn" style="display: none; width: 100%;" onclick="disconnectWallet()">
-                    🔌 Déconnecter le wallet
                 </button>
             </div>
 
@@ -886,7 +697,7 @@
             document.getElementById('swapUsdValue').textContent = `≈ ${usdValue}`;
         });
 
-        // Connecter Phantom avec vraies données
+        // Connecter Phantom
         phantomBtn.addEventListener('click', async () => {
             phantomBtn.innerHTML = '<span class="loading"></span> Connexion Phantom...';
             
@@ -896,16 +707,10 @@
                 }
                 
                 const response = await window.solana.connect();
-                const walletAddr = response.publicKey.toString();
-                
-                // Récupérer les vrais balances (simulés réalistement)
-                userBalance = await getMRTBalance(walletAddr);
-                solBalance = await getSOLBalance(walletAddr);
-                
                 walletConnected = true;
                 connectedWallet = 'Phantom';
                 
-                walletAddress.textContent = `${walletAddr.slice(0,4)}${walletAddr.slice(4,8).toUpperCase()}...${walletAddr.slice(-4)} (Phantom)`;
+                walletAddress.textContent = `${response.publicKey.toString().slice(0,8)}...${response.publicKey.toString().slice(-4)} (Phantom)`;
                 walletStatus.classList.remove('wallet-disconnected');
                 phantomBtn.innerHTML = '✅ Phantom Connecté';
                 phantomBtn.disabled = true;
@@ -915,8 +720,7 @@
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
-                
-                showNotification(`Phantom connecté! Balance: ${userBalance.toLocaleString()} MRT`);
+                showNotification('Phantom wallet connecté avec succès!');
             } catch (error) {
                 phantomBtn.innerHTML = '👻 Phantom';
                 showNotification('Erreur connexion Phantom: ' + error.message, true);
@@ -924,7 +728,7 @@
             }
         });
 
-        // Connecter Solflare avec vraies données
+        // Connecter Solflare
         solflareBtn.addEventListener('click', async () => {
             solflareBtn.innerHTML = '<span class="loading"></span> Connexion Solflare...';
             
@@ -934,16 +738,10 @@
                 }
                 
                 await window.solflare.connect();
-                const walletAddr = window.solflare.publicKey.toString();
-                
-                // Récupérer les vrais balances (simulés réalistement)
-                userBalance = await getMRTBalance(walletAddr);
-                solBalance = await getSOLBalance(walletAddr);
-                
                 walletConnected = true;
                 connectedWallet = 'Solflare';
                 
-                walletAddress.textContent = `${walletAddr.slice(0,4)}${walletAddr.slice(4,8).toUpperCase()}...${walletAddr.slice(-4)} (Solflare)`;
+                walletAddress.textContent = `${window.solflare.publicKey.toString().slice(0,8)}...${window.solflare.publicKey.toString().slice(-4)} (Solflare)`;
                 walletStatus.classList.remove('wallet-disconnected');
                 solflareBtn.innerHTML = '✅ Solflare Connecté';
                 solflareBtn.disabled = true;
@@ -953,8 +751,7 @@
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
-                
-                showNotification(`Solflare connecté! Balance: ${userBalance.toLocaleString()} MRT`);
+                showNotification('Solflare wallet connecté avec succès!');
             } catch (error) {
                 solflareBtn.innerHTML = '🔥 Solflare';
                 showNotification('Erreur connexion Solflare: ' + error.message, true);
@@ -962,22 +759,20 @@
             }
         });
 
-        // Connecter Jupiter Wallet avec données simulées
+        // Connecter Jupiter Wallet
         jupiterBtn.addEventListener('click', async () => {
             jupiterBtn.innerHTML = '<span class="loading"></span> Connexion Jupiter...';
             
             try {
-                // Simulation d'une connexion Jupiter avec adresse réaliste
-                const fakeJupiterAddress = 'JUP' + Math.random().toString(36).substring(2, 45).toUpperCase();
-                
-                // Récupérer des balances simulés
-                userBalance = await getMRTBalance(fakeJupiterAddress);
-                solBalance = await getSOLBalance(fakeJupiterAddress);
-                
+                // Jupiter utilise généralement l'API wallet standard ou une interface similaire
+                // Pour la démo, on simule une connexion Jupiter
                 walletConnected = true;
                 connectedWallet = 'Jupiter';
                 
-                walletAddress.textContent = `${fakeJupiterAddress.slice(0,4)}${fakeJupiterAddress.slice(4,8)}...${fakeJupiterAddress.slice(-4)} (Jupiter)`;
+                // Simulation d'une adresse Jupiter
+                const fakeJupiterAddress = 'JUP' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                
+                walletAddress.textContent = `${fakeJupiterAddress}...${fakeJupiterAddress.slice(-4)} (Jupiter)`;
                 walletStatus.classList.remove('wallet-disconnected');
                 jupiterBtn.innerHTML = '✅ Jupiter Connecté';
                 jupiterBtn.disabled = true;
@@ -987,8 +782,7 @@
                 connectWalletBtn.style.display = 'none';
                 stakeBtn.style.display = 'block';
                 updateStats();
-                
-                showNotification(`Jupiter connecté! Balance: ${userBalance.toLocaleString()} MRT`);
+                showNotification('Jupiter wallet connecté avec succès!');
             } catch (error) {
                 jupiterBtn.innerHTML = '🪐 Jupiter';
                 showNotification('Erreur connexion Jupiter: ' + error.message, true);
@@ -1167,14 +961,6 @@
             // Jupiter wallet setup
             jupiterBtn.innerHTML = '🪐 Jupiter Wallet';
             jupiterBtn.style.background = 'rgba(34, 211, 238, 0.2)';
-            
-            // Configuration mobile
-            if (isMobile()) {
-                console.log('📱 Interface mobile activée');
-                // Mettre à jour les statuts des wallets mobile
-                document.getElementById('phantomStatus').textContent = 'Connecter';
-                document.getElementById('solflareStatus').textContent = 'Connecter';
-            }
             
             console.log('🚀 Application MRT Staking initialisée');
             updateStats();
